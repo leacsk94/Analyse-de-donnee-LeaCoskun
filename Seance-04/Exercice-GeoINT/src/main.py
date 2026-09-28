@@ -19,17 +19,76 @@ def ouvrirUnFichier(nom):
 # L'échantillonnage se base sur la répétitivité.
 print("Question 1")
 print("Résultat sur le calcul d'un intervalle de fluctuation")
+echantillons = ouvrirUnFichier("data/Echantillonnage-100-Echantillons.csv")
+print(echantillons.head())
+moyennes = []
+
+for colonne in echantillons.columns:
+    moyenne = round(echantillons[colonne].mean())
+    moyennes.append(moyenne)
+
+print(moyennes)
+total_moyennes = sum(moyennes)
+
+frequences = []
+for moyenne in moyennes:
+    frequences.append(round(moyenne / total_moyennes, 2))
+
+print("Fréquences des échantillons :", frequences)
+population = [852, 911, 422]
+total_population = sum(population)
+
+frequences_population = []
+for valeur in population:
+    frequences_population.append(round(valeur / total_population, 2))
+
+print("Fréquences de la population mère :", frequences_population)
+zc = 1.96
+
+for frequence in frequences:
+    borne_inf = frequence - zc * math.sqrt((frequence * (1 - frequence)) / total_moyennes)
+    borne_sup = frequence + zc * math.sqrt((frequence * (1 - frequence)) / total_moyennes)
+
+    print("Intervalle de fluctuation :", round(borne_inf, 2), round(borne_sup, 2))
 
 # Question 2 : Théorie de l'estimation (intervalles de confiance)
 #L'estimation se base sur l'effectif.
 print("Question 2")
 print("Résultat sur le calcul d'un intervalle de confiance")
+premier_echantillon = list(echantillons.iloc[0])
+
+total_echantillon = sum(premier_echantillon)
+
+frequences_echantillon = []
+for valeur in premier_echantillon:
+    frequences_echantillon.append(round(valeur / total_echantillon, 2))
+
+print("Premier échantillon :", premier_echantillon)
+print("Effectif total :", total_echantillon)
+print("Fréquences :", frequences_echantillon)
+for frequence in frequences_echantillon:
+    borne_inf = frequence - zc * math.sqrt((frequence * (1 - frequence)) / total_echantillon)
+    borne_sup = frequence + zc * math.sqrt((frequence * (1 - frequence)) / total_echantillon)
+
+    print("Intervalle de confiance :", round(borne_inf, 2), round(borne_sup, 2))
+
 
 # Question 3 : Théorie de la décision (tests d'hypothèse)
 # La décision se base sur la notion de risques alpha et bêta.
 # Comme à la séance précédente, l'ensemble des tests se trouve au lien : https://docs.scipy.org/doc/scipy/reference/stats.html
 print("Question 3")
 print("Théorie de la décision")
+test1 = ouvrirUnFichier("data/Loi-normale-Test-1.csv")
+test2 = ouvrirUnFichier("data/Loi-normale-Test-2.csv")
+
+resultat_test1 = scipy.stats.shapiro(test1.iloc[:, 0])
+resultat_test2 = scipy.stats.shapiro(test2.iloc[:, 0])
+
+print("Test 1 :", resultat_test1)
+print("Test 2 :", resultat_test2)
+
 
 # Question bonus
 print("Question bonus")
+print("La distribution non normale est le Test 2.")
+print("Elle correspond à une loi de Zipf.")
