@@ -187,7 +187,7 @@ print("Question 1g : graphique des individus créé")
 
 valeurs_propres = pca.explained_variance_
 
-denom = len(sipri) * valeurs_propres
+denom = (len(sipri) - 1) * valeurs_propres
 
 contributions = np.divide(
     coordonnees ** 2,
