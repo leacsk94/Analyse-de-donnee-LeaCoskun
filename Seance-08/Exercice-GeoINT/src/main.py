@@ -381,9 +381,10 @@ exporter(
 
 acm = prince.MCA(
     n_components=8,
+    one_hot=False,
+    engine="scipy",
     random_state=42
 )
-
 acm = acm.fit(tdc)
 
 print("Question 2d : ACM calculée sur huit facteurs")
